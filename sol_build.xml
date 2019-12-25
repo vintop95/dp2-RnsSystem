@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." name="rns-service" default="build-service">
+	<description>
+		Script for DP2-RNS Web Service
+	</description>
+	
+	
+	
+	<property name="serviceName" value="RnsService" />
+	
+	<property name="basedir" location="." />
+	
+	<property name="ext.lib.dir" location="/opt/dp2/shared/lib" />
+	<property name="xsd.dir" location="${basedir}/xsd" />
+	<property name="custom.dir" location="${basedir}/custom" />
+	<property name="build.dir" location="${basedir}/build" />
+	<property name="lib.src.dir" location="${basedir}/lib-src" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="doc.dir" location="${basedir}/doc" />
+	<property name="tomcat.basedir" 
+		location="${basedir}/WebContent"/>
+	
+	<property name="testcase" value="1" />
+	
+	<!-- The "RnsReaderFactory" used for tests -->
+	<property name="testRnsReaderFactory" value="it.polito.dp2.RNS.Random.RnsReaderFactoryImpl" />
+		
+	<target name="clean-artifacts">
+		<delete dir="${custom.dir}"/>
+		<mkdir dir="${custom.dir}"/>
+	</target>
+			
+	<target name="generate-artifacts-neo4j">
+		<echo message="Compiling the schemas for neo4j..." />		
+		<exec executable="xjc" failonerror="true" >
+			<arg value="-d" />
+			<arg value="${custom.dir}" />
+			<arg value="-p" />
+			<arg value="it.polito.dp2.RNS.sol2.jaxb" />
+			<arg value="${xsd.dir}/rns4neo4j.xsd" />
+		</exec>
+	</target>
+		
+	<target name="generate-xsd-artifacts">
+		<echo message="Compiling the schemas for Rns Resources..." />		
+		<exec executable="xjc" failonerror="true" >
+			<arg value="-d" />
+			<arg value="${custom.dir}" />
+			<arg value="-p" />
+			<arg value="it.polito.dp2.RNS.sol3.jaxb" />
+			<arg value="${xsd.dir}/RnsSystem.xsd" />
+		</exec>
+	</target>
+	
+	<!-- The classpath to be used for compilation of the solution -->
+	<path id="sol.classpath">
+		<pathelement location="${lib.dir}/RNS.jar"/>
+		<pathelement location="${lib.dir}/lab3.jar"/>
+		<fileset dir="${ext.lib.dir}">
+		    <include name="*.jar" />
+				<exclude name="ant-*.jar"/>
+		</fileset>
+		<fileset dir="${lib.dir}">
+		    <include name="*.jar" />
+				<exclude name="ant-*.jar"/>
+		</fileset>
+	</path>
+	
+	<target name="build-service-javac" description="Builds server">
+		<echo message="Copying xsd into WEB-INF/classes" />
+		
+		<echo>Copying xsd into tomcat path for json validation...</echo>
+		<mkdir dir="${tomcat.basedir}/WEB-INF/classes/xsd" />
+  	<copy toDir="${tomcat.basedir}/WEB-INF/classes/xsd"
+  				overwrite="true">
+  			<fileset dir="${xsd.dir}"/>
+		</copy>
+		   
+		<echo>Copying doc into tomcat path for accessing it online...</echo>
+  	<copy toDir="${tomcat.basedir}" overwrite="true">
+  			<fileset dir="${doc.dir}"/>
+		</copy>
+		
+		<echo message="Compiling..." />
+		<javac debug="on"
+					 source="1.8"
+					 srcdir="${src.dir}"
+					 destdir="${build.dir}"
+					 target="1.8"
+					 includeantruntime="false">
+				
+			<src path="${src.dir}"/>
+			<src path="${lib.src.dir}"/>
+			<src path="${custom.dir}"/>
+			<include name="it/polito/dp2/RNS/sol3/service/**" />
+			<classpath>
+				<path refid="sol.classpath" />
+			</classpath>
+		</javac>
+		<echo>Done.</echo>
+	</target>
+	
+	<target name="build-client-javac" description="Builds client">
+			<echo message="Compiling..." />
+			<javac debug="on"
+						 source="1.8"
+						 srcdir="${src.dir}"
+						 destdir="${build.dir}"
+						 target="1.8"
+						 includeantruntime="false">
+					
+				<src path="${src.dir}"/>
+				<src path="${lib.src.dir}"/>
+				<src path="${custom.dir}"/>
+				<include name="it/polito/dp2/RNS/sol3/admClient/**" />
+				<include name="it/polito/dp2/RNS/sol3/vehClient/**" />
+				<classpath>
+					<path refid="sol.classpath" />
+				</classpath>
+			</javac>
+			<echo>Done.</echo>
+		</target>
+	
+	<!-- START WADL -->
+	
+	<import file="build.xml"/>
+	<property name="rns.wadl" value="${URL}/application.wadl" />
+	
+	<!-- define wjc task (WADL to Java) -->
+	<taskdef name="wjc" classname="org.jvnet.ws.wadl2java.WJCTask">
+	   <classpath>
+	   	<fileset dir="${ext.lib.dir}" includes="*.jar" />
+	   </classpath>
+	</taskdef>
+	
+	<!-- define the client artifacts generation target -->
+	<target name="generate-wadl-artifacts" depends="init">
+	   	<echo message="Compiling wadl description for RNS..." />
+	   	<wjc description="${rns.wadl}" package="it.polito.dp2.RNS.sol3.wadl"
+	       autoSchemaPackage="false" target="${custom.dir}">
+	     <customizations dir="${basedir}" includes="binding.xjc"/>
+	     <produces dir="${custom.dir}/it/polito/dp2/RNS/sol3/wadl" 
+	     	includes="*.java"/>
+	     <depends dir="${basedir}" includes="build.xml"/>
+	    </wjc>
+	</target>
+	
+	<!-- END WADL -->
+	
+	<target name="build-service">
+		<echo message="Building RnsService..." />	
+		<antcall target="generate-artifacts-neo4j" />
+		<antcall target="generate-xsd-artifacts" />
+		<antcall target="build-service-javac" />
+	</target>
+
+	<target name="build-client">
+		<echo message="Building clients of RnsService..." />
+		<antcall target="generate-xsd-artifacts" />
+		<antcall target="build-client-javac" />
+	</target>
+	
+</project>

@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>DP2-RNS Implementation</title>
+</head>
+<body>
+<h2>DP2-RNS RESTful Web Service - Implementation choices</h2>
+<h4>By Vincenzo Topazio</h4>
+<p>
+<ol>
+
+	<li><b>ARCHITECTURE</b>: the Web Service is divided into three layers:
+	<ol>
+		<li><b>DB LAYER</b>: it allows CRUD operations and some ready query on a virtual database stored in main memory. <br/>
+				It contains the same data structures used in the HTTP messages. It's used an index-like mechanism to get the resources both by ID and URI: considering that URI is built from the ID of the resource, it's enough to use as key of the maps the URI and call a function to compute the URI from the ID <br/>
+				It doesn't throw exceptions and it's guaranteed to be thread safe</li>
+		<li><b>SERVICE LAYER</b>: it allows the same operations of the REST interface, but in a more abstract flavor in order to have more flexibility in case of use of other net technologies.<br/>
+		It throws a set of exceptions mapped in the REST layer with HTTP status codes and it's also guaranteed to be thread safe </li>
+		<li><b>WEB (REST) RESOURCES LAYER</b>: it allows operations shown in user documentation.</li>
+	</ol>
+	</li>
+	<li>
+		<b>CONCURRENCY</b>: race conditions are avoided by using synchronized blocks with the lock only on the vehicles, because the only mutable shared data are the vehicles.<br/>
+		Particular attention was given to the granularity of the concurrency in order to increase performance. Concurrent data structures were used to maximize reentrant code and the critical sections are as concise as possible by considering only the sections with vehicle management. 
+	</li>
+	<li><b>AUTHENTICATION</b>: due to the presence of two different possible delete operation on the vehicle resource and due to the existence of two kind of clients with different levels of privilege, I chose to implement a simple authentication mechanism with no pretense of security accuracy by adding a query parameter to every authenticable operation</li>
+	<li>
+		<b>CACHING (CONDITIONAL REQUESTS) </b>: the server adds a Last-Modified header with GET request of mutable resources (getRns, getVehicles, getVehicle, getPositionOfVehicle, getOriginOfVehicle, getDestinationOfVehicle, getSuggestedPathOfVehicle, getVehiclesInPlace). When clients does a request with a If-Modified-Since header, the server checks if resources requested have been modified, and if not sends a Not Modified Status Code (304).<br/>
+	</li>
+	<li>Place B is reachable from place A if and only if ((exists a path from A to B) AND (place A != place B)) OR (place A == place B) <br/>
+	[use findShortestPaths to verify REACHABILITY]
+	<li>Code of previous labs were modified and enhanced to better fit in this assignment</li>
+</ol>
+</p>
+
+<h3>Other simplification choices</h3>
+<ol>
+	<li><b>PAGING</b> mechanism is disabled by using one single page</li>
+	<li>The move request is accepted even if the vehicle is in PARKED state</li>
+	<li><b>WADL</b> was not used to generate artifacts for RNS Clients because it generates
+	a subset of classes, just the one that are returned directly from the methods in the JAX RS resources.
+	The classes returned indirectly with a Response object are not generated. 
+	However an ant script to generate them is present.</li>
+</ol>
+	
+</body>
+</html>

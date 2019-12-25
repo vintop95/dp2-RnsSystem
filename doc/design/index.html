@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DP2-RNS Design</title>
+</head>
+<body>
+<h2>DP2-RNS RESTful Web Service - Design choices</h2>
+<h4>By Vincenzo Topazio</h4>
+<!-- 
+Explanation of the design decisions made and of how they implement the guidelines and best
+practices taught in the course.
+-->
+
+<p>
+<!-- how they implement the guidelines and best
+practices taught in the course: -->
+- Principles, best practices, guidelines about interface design:
+<ol>
+<li> do not expose more than strictly necessary (information hiding)</li>
+<li> choose adequate granularity level for resources (performance)</li>
+<li> use resource concept correctly (no resource that represents action, no multiple URIs for same resource, etc)</li>
+<li> minimize the number of interactions necessary to perform operations (performance)</li>
+<li> limit the size of messages (let clients choose what to get, etc)</li>
+<li> use HTTP methods consistently with their standard meaning and features</li>
+<li> foresee all particular cases and decide how errors will be communicated to clients</li>
+<li> use HTTP status codes consistently with their standard meaning</li>
+<li> support HTTP headers as much as possible/convenient</li>
+<li> use HTTP media-type headers to control types</li>
+<li> use idempotent methods when possible and convenient</li>
+<li> provide hyperlinks so as to enable HATEOAS</li>
+<li> exploit HTTP features for efficiency (e.g. use GET whenever possible because it is more efficient (caching), etc)</li>
+<li> use stateless interactions only (no server status about sessions apart from resources: use only resources to store state in service)</li>
+<li> use HTTP self-documentation features </li>
+<li> complement self-documentation features with user documentation (make sure a user has all
+the necessary information about the service) </li>
+</ol>
+The application of these principles are shown below with an annotation: (n) (ex (13))</p>
+
+<p><pre><code>
+=(2)=(3)==== RESOURCES STRUCTURE ===========
+
+rns  (Service Root)           [GET]
+|-- vehicles                  [POST/GET]
+|   |-- {id}                  [DELETE/GET]
+|         |-- state           [PUT]
+|         |-- position        [PUT/GET]
+|         |-- origin          [GET]
+|         |-- destination     [GET]
+|         |-- suggestedPath   [GET]
+|
+|-- roads                     [GET]
+|     |-- {roadName}          [GET]
+|
+|-- places                    [GET]
+|     |-- roadSegments        [GET]
+|     |-- parkingAreas        [GET]
+|     |-- gates               [GET]
+|     |-- {id}                [GET]
+|           |--vehicles       [GET]
+|           |--nextPlaces     [GET]
+| 
+|-- connections               [GET]
+      |-- {from}              [GET]
+            |-- {to}          [GET]
+=========================================
+</code></pre></p>
+
+<p>
+<!-- Design decisions made: -->
+(4)(12) The main resource <code>rns</code> returns the URIs to the resources 
+accessible by the administrator and the ones accessible by the client vehicles. 
+This is made in order to make the service HATOEAS compliant.
+To assure the enforcement of correct authorizations, a query parameter containing an authentication token is added to every authenticable operation.
+All GET for all resources give URI to navigate into subresources or referenced resources.
+</p><p>
+(6) Vehicles can enter into the system with a POST request.
+The vehicle can go out with DELETE and it can change its position or state
+by PUTting rns/vehicles/{id}/position or rns/vehicles/{id}/state.
+</p><p>
+(1) Vehicle can see just the id of the places into the suggestedPath and
+cannot see the URI to the place resources, accessible only by administrators.
+</p><p>
+(5) Administrators can access all kind of information from the system (roads, places, 
+connections and vehicles) and they can filter the resources by passing their attributes to the request. They can access information by authenticating with a token passed by query parameter.
+The response will always be given in size-limited pages.
+</p><p>
+(7)(8) All possible errors are documented in the user documentation and are coherently mapped 
+into HTTP status codes.
+</p><p>
+(9) Vehicle post operation returns a location header to the new vehicle
+</p><p>
+(10) RNS service can be accessed either by json or xml media types.
+</p><p>
+(11) Except naturally for posting a new vehicle and deleting a vehicle, all methods are idempotent.
+</p><p>
+(13) GET is used in all the logical retrieving operations. Client can use date headers to cache.
+</p><p>
+(14) All operations are stateless (apart from resources)
+</p><p>
+(15) HTTP self documentation is given automatically by the jax-rs framework.
+</p>
+
+</body>
+</html>

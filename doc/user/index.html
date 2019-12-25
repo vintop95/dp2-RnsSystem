@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>DP2-RNS Documentation</title>
+</head>
+<body>
+<h2>DP2-RNS RESTful Web Service</h2>
+<h4>By Vincenzo Topazio</h4>
+<p>
+DP2-RNS is a (simplified) distributed system that provides Road Navigation Services. The users of
+this system can get directions about how to reach a given destination place within the road system
+managed by DP2-RNS and their position can be tracked by the system.
+</p>
+<p><a href="swagger-html-doc.html">OFFLINE html user documentation</a></p>
+<p><a href="https://app.swaggerhub.com/apis-docs/vintop95/DP2-RNS/1.0.0#/">Swagger ONLINE documentation</a></p>
+<p>
+The main resource of the service is named <code>rns</code>
+which represents the resources available into the service. <br>
+There are two types of clients of the system: administrators and vehicles.<br>
+Vehicles can enter into the system, change its state and position.<br>
+Administrators can get all kind of informations from the system (using the given token) and can remove vehicles from the system.
+</p>
+<p><pre><code>
+========== RESOURCES STRUCTURE ===========
+
+rns  (Service Root)           [GET]
+|-- vehicles                  [POST/GET]
+|   |-- {id}                  [DELETE/GET]
+|         |-- state           [PUT]
+|         |-- position        [PUT/GET]
+|         |-- origin          [GET]
+|         |-- destination     [GET]
+|         |-- suggestedPath   [GET]
+|
+|-- roads                     [GET]
+|     |-- {roadName}          [GET]
+|
+|-- places                    [GET]
+|     |-- roadSegments        [GET]
+|     |-- parkingAreas        [GET]
+|     |-- gates               [GET]
+|     |-- {id}                [GET]
+|           |--vehicles       [GET]
+|           |--nextPlaces     [GET]
+| 
+|-- connections               [GET]
+      |-- {from}              [GET]
+            |-- {to}          [GET]
+=========================================
+</code></pre></p>
+</body>
+</html>

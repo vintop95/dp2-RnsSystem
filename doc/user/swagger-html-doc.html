@@ -1,0 +1,2891 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Road Navigation System</title>
+    <style type="text/css">
+.example{
+  background-color: #f3f3f3;
+  padding-left: 10px;
+  border: 1px solid #ddd;
+  margin-bottom: 2px;
+  margin-top: 1em;
+}
+      body {
+	font-family: Trebuchet MS, sans-serif;
+	font-size: 15px;
+	color: #444;
+	margin-right: 24px;
+}
+
+h1	{
+	font-size: 25px;
+}
+h2	{
+	font-size: 20px;
+}
+h3	{
+	font-size: 16px;
+	font-weight: bold;
+}
+hr	{
+	height: 1px;
+	border: 0;
+	color: #ddd;
+	background-color: #ddd;
+}
+
+.app-desc {
+  clear: both;
+  margin-left: 20px;
+}
+.param-name {
+  width: 100%;
+}
+.license-info {
+  margin-left: 20px;
+}
+
+.license-url {
+  margin-left: 20px;
+}
+
+.model {
+  margin: 0 0 0px 20px;
+}
+
+.method {
+  margin-left: 20px;
+}
+
+.method-notes	{
+	margin: 10px 0 20px 0;
+	font-size: 90%;
+	color: #555;
+}
+
+pre {
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.http-method {
+ text-transform: uppercase;
+}
+
+pre.get {
+  background-color: #0f6ab4;
+}
+
+pre.post {
+  background-color: #10a54a;
+}
+
+pre.put {
+  background-color: #c5862b;
+}
+
+pre.delete {
+  background-color: #a41e22;
+}
+
+.huge	{
+	color: #fff;
+}
+
+pre.example {
+  background-color: #f3f3f3;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+code {
+  white-space: pre;
+}
+
+.nickname {
+  font-weight: bold;
+}
+
+.method-path {
+  font-size: 1.5em;
+  background-color: #0f6ab4;
+}
+
+.up {
+  float:right;
+}
+
+.parameter {
+  width: 500px;
+}
+
+.param {
+  width: 500px;
+  padding: 10px 0 0 20px;
+  font-weight: bold;
+}
+
+.param-desc {
+  width: 700px;
+  padding: 0 0 0 20px;
+  color: #777;
+}
+
+.param-type {
+  font-style: italic;
+}
+
+.param-enum-header {
+width: 700px;
+padding: 0 0 0 60px;
+color: #777;
+font-weight: bold;
+}
+
+.param-enum {
+width: 700px;
+padding: 0 0 0 80px;
+color: #777;
+font-style: italic;
+}
+
+.field-label {
+  padding: 0;
+  margin: 0;
+  clear: both;
+}
+
+.field-items	{
+	padding: 0 0 15px 0;
+	margin-bottom: 15px;
+}
+
+.return-type {
+  clear: both;
+  padding-bottom: 10px;
+}
+
+.param-header {
+  font-weight: bold;
+}
+
+.method-tags {
+  text-align: right;
+}
+
+.method-tag {
+  background: none repeat scroll 0% 0% #24A600;
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 2px;
+  color: #FFF;
+  display: inline-block;
+  text-decoration: none;
+}
+
+    </style>
+  </head>
+  <body>
+  <h1>Road Navigation System</h1>
+    <div class="app-desc">Assignment 3 - RNS - Vincenzo Topazio</div>
+    <div class="app-desc">More information: <a href="https://pad.polito.it:8080/enginframe/dp2/dp2.xml">https://pad.polito.it:8080/enginframe/dp2/dp2.xml</a></div>
+    <div class="app-desc">Contact Info: <a href="s253137@studenti.polito.it">s253137@studenti.polito.it</a></div>
+    <div class="app-desc">Version: 1.0.0</div>
+    <div class="app-desc">BasePath:/vintop95/DP2-RNS/1.0.0</div>
+    <div class="license-info">Apache 2.0</div>
+    <div class="license-url">https://www.apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#R1Root">R1Root</a></h4>
+  <ul>
+  <li><a href="#getRns"><code><span class="http-method">get</span> /rns</code></a></li>
+  </ul>
+  <h4><a href="#R2Vehicles">R2Vehicles</a></h4>
+  <ul>
+  <li><a href="#addVehicle"><code><span class="http-method">post</span> /rns/vehicles</code></a></li>
+  <li><a href="#changeVehicleState"><code><span class="http-method">put</span> /rns/vehicles/{id}/state</code></a></li>
+  <li><a href="#moveVehicle"><code><span class="http-method">put</span> /rns/vehicles/{id}/position</code></a></li>
+  <li><a href="#removeVehicle"><code><span class="http-method">delete</span> /rns/vehicles/{id}</code></a></li>
+  </ul>
+  <h4><a href="#R3AdminVehicles">R3AdminVehicles</a></h4>
+  <ul>
+	 <li><a href="#getVehicles"><code><span class="http-method">get</span> /rns/vehicles</code></a></li>
+  <li><a href="#getVehicle"><code><span class="http-method">get</span> /rns/vehicles/{id}</code></a></li>
+	<li><a href="#getPositionOfVehicle"><code><span class="http-method">get</span> /rns/vehicles/{id}/position</code></a></li>
+  <li><a href="#getOriginOfVehicle"><code><span class="http-method">get</span> /rns/vehicles/{id}/origin</code></a></li>
+  <li><a href="#getDestinationOfVehicle"><code><span class="http-method">get</span> /rns/vehicles/{id}/destination</code></a></li> 
+  <li><a href="#getSuggestedPathOfVehicle"><code><span class="http-method">get</span> /rns/vehicles/{id}/suggestedPath</code></a></li>
+
+  </ul>
+  <h4><a href="#R4AdminRoads">R4AdminRoads</a></h4>
+  <ul>
+  <li><a href="#getRoads"><code><span class="http-method">get</span> /rns/roads</code></a></li>
+	<li><a href="#getRoad"><code><span class="http-method">get</span> /rns/roads/{roadName}</code></a></li>
+  </ul>
+  <h4><a href="#R5AdminPlaces">R5AdminPlaces</a></h4>
+  <ul>
+	<li><a href="#getPlaces"><code><span class="http-method">get</span> /rns/places</code></a></li>
+	<li><a href="#getRoadSegments"><code><span class="http-method">get</span> /rns/places/roadSegments</code></a></li>
+	<li><a href="#getParkingAreas"><code><span class="http-method">get</span> /rns/places/parkingAreas</code></a></li>
+  <li><a href="#getGates"><code><span class="http-method">get</span> /rns/places/gates</code></a></li>
+	<li><a href="#getPlace"><code><span class="http-method">get</span> /rns/places/{id}</code></a></li>
+  <li><a href="#getNextPlaces"><code><span class="http-method">get</span> /rns/places/{id}/nextPlaces</code></a></li>
+  <li><a href="#getVehiclesInPlace"><code><span class="http-method">get</span> /rns/places/{id}/vehicles</code></a></li>
+  </ul>
+  <h4><a href="#R6AdminConnections">R6AdminConnections</a></h4>
+  <ul>
+  <li><a href="#getConnections"><code><span class="http-method">get</span> /rns/connections</code></a></li>
+  <li><a href="#getConnectionsFrom"><code><span class="http-method">get</span> /rns/connections/{from}</code></a></li>
+  <li><a href="#getConnectionsFromTo"><code><span class="http-method">get</span> /rns/connections/{from}/{to}</code></a></li>
+  </ul>
+
+  <h1><a name="R1Root">R1Root</a></h1>
+  <div class="method"><a name="getRns"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns</code></pre></div>
+    <div class="method-summary">RNS Service root (<span class="nickname">getRns</span>)</div>
+    <div class="method-notes">Get the RNS Service root. If an admin is authenticated, it gives the uri of all the resources available, otherwise it gives just the uri of the vehicles.</div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#RnsRootResponse">RnsRootResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "gates" : "gates",
+  "places" : "places",
+  "self" : "self",
+  "vehicles" : "vehicles",
+  "roads" : "roads",
+  "parkingAreas" : "parkingAreas",
+  "roadSegments" : "roadSegments",
+  "connections" : "connections"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><rnsRootResponse>
+  <self>aeiou</self>
+  <vehicles>aeiou</vehicles>
+  <roads>aeiou</roads>
+  <places>aeiou</places>
+  <roadSegments>aeiou</roadSegments>
+  <parkingAreas>aeiou</parkingAreas>
+  <gates>aeiou</gates>
+  <connections>aeiou</connections>
+</rnsRootResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    RNS retrieved
+        <a href="#RnsRootResponse">RnsRootResponse</a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="R2Vehicles">R2Vehicles</a></h1>
+  <div class="method"><a name="addVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /rns/vehicles</code></pre></div>
+    <div class="method-summary">Vehicle requests to enter into the RNS (<span class="nickname">addVehicle</span>)</div>
+    <div class="method-notes"><ol start="2">
+<li>A vehicle that wants to enter the system has to request permission to the system. In the permission request the vehicle must specify the entrance (IN or INOUT) gate where it is, and the destination place it wants to go to. The system may grant permission or not. If the destination is not reachable, the system does not grant permission, but there may be other reasons (e.g. congestion or other system policies) for not granting permission. If the permission is granted, the system computes a suggested path to the destination, adds the vehicle to the set of vehicles that are tracked in the system, with its current position set at the entrance gate and its initial state set to IN_TRANSIT, and communicates the suggested path to the vehicle. If instead the permission is not granted, the system communicates the reason for not granting the access to the vehicle, and the vehicle is not added to the set of vehicles that are tracked in the system.</li>
+</ol>
+</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#NewVehicle">NewVehicle</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; It contains the initialization details of a vehicle 
+			<br/><br/>
+			<h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "type": "CAR",
+  "originId": "string",
+  "destinationId": "string",
+  "id": "string"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><newVehicle>
+	<type>CAR</type>
+	<originId>string</originId>
+	<destinationId>string</destinationId>
+	<id>string</id>
+</newVehicle></xmp></div>
+    </div></div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#AddVehicleResponse">AddVehicleResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "vehicleUri" : "vehicleUri",
+  "placesIdPath" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  },
+  "authToken" : "authToken",
+  "stateUri" : "stateUri",
+  "positionUri" : "positionUri"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><addVehicleResponse>
+	<vehicleUri>string</vehicleUri>
+	<authToken>string</authToken>
+	<positionUri>string</positionUri>
+	<stateUri>string</stateUri>
+	<placesIdPath>
+		<placeUri>string</placeUri>
+	</placesIdPath>
+</addVehicleResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Vehicle created
+        <a href="#AddVehicleResponse">AddVehicleResponse</a>. Location header returns the position of the new vehicle.
+    <h4 class="field-label">400</h4>
+    Invalid body
+        <a href="#"></a>
+    <h4 class="field-label">403</h4>
+    Entrance refused (Congestion OR Vehicle already exists OR destination unreachable OR other system policies)
+        <a href="#"></a>
+    <h4 class="field-label">409</h4>
+    Unknown origin/destination OR Wrong input Gate
+        <a href="#ErrorBody">ErrorBody</a>.
+				    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "error": "UNKNOWN_PLACE"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><errorBody>
+	<error>UNKNOWN_PLACE</error>
+</errorBody></xmp></div><br/>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="changeVehicleState"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /rns/vehicles/{id}/state</code></pre></div>
+    <div class="method-summary">Vehicle requests to change its state (<span class="nickname">changeVehicleState</span>)</div>
+    <div class="method-notes"><ol start="5">
+<li>tracked vehicle can request the system to change its state at any time. The request is always accepted by the system.</li>
+</ol>
+</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Plate id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#ChangeStateRequest">ChangeStateRequest</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; It contains the new state of the vehicle <br/><br/>
+			<h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "state": "PARKED"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><changeStateRequest>
+	<state>PARKED</state>
+</changeStateRequest></xmp></div><br/>
+			</div>
+
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin (use &quot;adminToken&quot; to authenticate) or the vehicle (use the authToken given by the server with the POST operation) </div>
+    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    Vehicle succesfully changed its state
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid state
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="moveVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /rns/vehicles/{id}/position</code></pre></div>
+    <div class="method-summary">Vehicle requests to move into a new place (<span class="nickname">moveVehicle</span>)</div>
+    <div class="method-notes"><ol start="3">
+<li>Whenever a tracked vehicle moves from a place to another one, it informs the system aboutthe new place where it is, and the system records the new current position of the vehicle. If the new place is not on the path suggested by the system for that vehicle, the system first checks if the new place is reachable from the previous current position of the vehicle. If so, it computes a new path from the new current position of the vehicle to the destination, and communicates this new path to the vehicle. If the path cannot be computed (e.g. because the destination is not reachable from the new current place), the vehicle remains without a suggested path. Finally, if the new place is not reachable from the previous current position of the vehicle, the request from the vehicle is considered wrong by the system, and nothing changes.</li>
+</ol>
+</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Plate id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body <a href="#MoveRequest">MoveRequest</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; It contains the new position where the vehicle moves 
+			<br/><br/>
+			<h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "newPositionId": "string"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><moveRequest>
+	<newPositionId>string</newPositionId>
+</moveRequest></xmp></div><br/>
+			</div>
+
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin (use &quot;adminToken&quot; to authenticate) or the vehicle (use the authToken given by the server with the POST operation) </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesIdPath">PlacesIdPath</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "placeUri" : [ "placeUri", "placeUri" ]
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesIdPath>
+  <placeUri>aeiou</placeUri>
+</placesIdPath></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Vehicle succesfully moved into a new position OUT of the suggested path. Suggested path recalculated.
+        <a href="#PlacesIdPath">PlacesIdPath</a>
+    <h4 class="field-label">204</h4>
+    Vehicle succesfully moved into a new position into the current suggested path.
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Invalid body
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle not found
+        <a href="#"></a>
+    <h4 class="field-label">409</h4>
+    Unknown OR Wrong (unreachable) place
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="removeVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /rns/vehicles/{id}</code></pre></div>
+    <div class="method-summary">Remove vehicle from the RNS (<span class="nickname">removeVehicle</span>)</div>
+    <div class="method-notes">IN ORDER TO DISTINGUISH ADMINISITRATOR AND VEHICLE OPERATION, the administrator must insert a query parameter 'authToken', while the vehicle must insert the authToken received in the POST operation. 4. When a tracked vehicle is in an OUT or INOUT gate, it can decide to exit from the system through that gate. When doing so, it contacts the system and communicates to the system that it has left the system. Upon receiving this information, the system removes the vehicle from the set of vehicles that are tracked in the system and forgets about it. 7. At any time, an administrator can request to remove a vehicle from the set of vehicles that are tracked in the system and the request is always accepted by the system.</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Plate id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">outGateId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Id of the out gate </div><div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin (use &quot;adminToken&quot; to authenticate) or the vehicle (use the authToken given by the server with the POST operation) </div>
+    </div>  <!-- field-items -->
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    Vehicle succesfully went out from the RNS
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle not found
+        <a href="#"></a>
+    <h4 class="field-label">409</h4>
+    Unknown OR Wrong (unreachable) outGate
+        <a href="#ErrorBody">ErrorBody</a>
+				<br/>
+				<h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "error": "UNKNOWN_PLACE"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><errorBody>
+	<error>UNKNOWN_PLACE</error>
+</errorBody></xmp></div><br/>
+				
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="R3AdminVehicles">R3AdminVehicles</a></h1>
+  <div class="method"><a name="getDestinationOfVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles/{id}/destination</code></pre></div>
+    <div class="method-summary">Get the destination of the vehicle {id} (<span class="nickname">getDestinationOfVehicle</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Place">Place</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "vehiclesUri" : "vehiclesUri",
+  "parkingArea" : {
+    "servicesId" : {
+      "serviceId" : [ "serviceId", "serviceId" ]
+    }
+  },
+  "roadSegment" : {
+    "name" : "name",
+    "roadName" : "roadName"
+  },
+  "self" : "self",
+  "gate" : {
+    "type" : "IN"
+  },
+  "id" : "id",
+  "nextPlacesUri" : "nextPlacesUri",
+  "uriOfNextPlaces" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  },
+  "capacity" : 0
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><place>
+	<self>string</self>
+	<roadSegment>
+		<name>string</name>
+		<roadName>string</roadName>
+	</roadSegment>
+	<parkingArea>
+		<servicesId>
+			<serviceId>string</serviceId>
+		</servicesId>
+	</parkingArea>
+	<gate>
+		<type>IN</type>
+	</gate>
+	<nextPlacesUri>string</nextPlacesUri>
+	<vehiclesUri>string</vehiclesUri>
+	<uriOfNextPlaces>
+		<placeUri>string</placeUri>
+	</uriOfNextPlaces>
+	<id>string</id>
+	<capacity>0</capacity>
+</place></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Destination of vehicle {id} retrieved
+        <a href="#Place">Place</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOriginOfVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles/{id}/origin</code></pre></div>
+    <div class="method-summary">Get the origin of the vehicle {id} (<span class="nickname">getOriginOfVehicle</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Place">Place</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "vehiclesUri" : "vehiclesUri",
+  "parkingArea" : {
+    "servicesId" : {
+      "serviceId" : [ "serviceId", "serviceId" ]
+    }
+  },
+  "roadSegment" : {
+    "name" : "name",
+    "roadName" : "roadName"
+  },
+  "self" : "self",
+  "gate" : {
+    "type" : "IN"
+  },
+  "id" : "id",
+  "nextPlacesUri" : "nextPlacesUri",
+  "uriOfNextPlaces" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  },
+  "capacity" : 0
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><place>
+	<self>string</self>
+	<roadSegment>
+		<name>string</name>
+		<roadName>string</roadName>
+	</roadSegment>
+	<parkingArea>
+		<servicesId>
+			<serviceId>string</serviceId>
+		</servicesId>
+	</parkingArea>
+	<gate>
+		<type>IN</type>
+	</gate>
+	<nextPlacesUri>string</nextPlacesUri>
+	<vehiclesUri>string</vehiclesUri>
+	<uriOfNextPlaces>
+		<placeUri>string</placeUri>
+	</uriOfNextPlaces>
+	<id>string</id>
+	<capacity>0</capacity>
+</place></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Origin of vehicle {id} retrieved
+        <a href="#Place">Place</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getPositionOfVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles/{id}/position</code></pre></div>
+    <div class="method-summary">Get the position of the vehicle {id} (<span class="nickname">getPositionOfVehicle</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Place">Place</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "vehiclesUri" : "vehiclesUri",
+  "parkingArea" : {
+    "servicesId" : {
+      "serviceId" : [ "serviceId", "serviceId" ]
+    }
+  },
+  "roadSegment" : {
+    "name" : "name",
+    "roadName" : "roadName"
+  },
+  "self" : "self",
+  "gate" : {
+    "type" : "IN"
+  },
+  "id" : "id",
+  "nextPlacesUri" : "nextPlacesUri",
+  "uriOfNextPlaces" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  },
+  "capacity" : 0
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><place>
+	<self>string</self>
+	<roadSegment>
+		<name>string</name>
+		<roadName>string</roadName>
+	</roadSegment>
+	<parkingArea>
+		<servicesId>
+			<serviceId>string</serviceId>
+		</servicesId>
+	</parkingArea>
+	<gate>
+		<type>IN</type>
+	</gate>
+	<nextPlacesUri>string</nextPlacesUri>
+	<vehiclesUri>string</vehiclesUri>
+	<uriOfNextPlaces>
+		<placeUri>string</placeUri>
+	</uriOfNextPlaces>
+	<id>string</id>
+	<capacity>0</capacity>
+</place></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Position of vehicle {id} retrieved
+        <a href="#Place">Place</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getSuggestedPathOfVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles/{id}/suggestedPath</code></pre></div>
+    <div class="method-summary">Get the suggested path for the vehicle {id} (<span class="nickname">getSuggestedPathOfVehicle</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacePath">PlacePath</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "place" : [ {
+    "vehiclesUri" : "vehiclesUri",
+    "parkingArea" : {
+      "servicesId" : {
+        "serviceId" : [ "serviceId", "serviceId" ]
+      }
+    },
+    "roadSegment" : {
+      "name" : "name",
+      "roadName" : "roadName"
+    },
+    "self" : "self",
+    "gate" : {
+      "type" : "IN"
+    },
+    "id" : "id",
+    "nextPlacesUri" : "nextPlacesUri",
+    "uriOfNextPlaces" : {
+      "placeUri" : [ "placeUri", "placeUri" ]
+    },
+    "capacity" : 0
+  }, {
+    "vehiclesUri" : "vehiclesUri",
+    "parkingArea" : {
+      "servicesId" : {
+        "serviceId" : [ "serviceId", "serviceId" ]
+      }
+    },
+    "roadSegment" : {
+      "name" : "name",
+      "roadName" : "roadName"
+    },
+    "self" : "self",
+    "gate" : {
+      "type" : "IN"
+    },
+    "id" : "id",
+    "nextPlacesUri" : "nextPlacesUri",
+    "uriOfNextPlaces" : {
+      "placeUri" : [ "placeUri", "placeUri" ]
+    },
+    "capacity" : 0
+  } ]
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placePath>
+	<place>
+		<self>string</self>
+		<roadSegment>
+			<name>string</name>
+			<roadName>string</roadName>
+		</roadSegment>
+		<parkingArea>
+			<servicesId>
+				<serviceId>string</serviceId>
+			</servicesId>
+		</parkingArea>
+		<gate>
+			<type>IN</type>
+		</gate>
+		<nextPlacesUri>string</nextPlacesUri>
+		<vehiclesUri>string</vehiclesUri>
+		<uriOfNextPlaces>
+			<placeUri>string</placeUri>
+		</uriOfNextPlaces>
+		<id>string</id>
+		<capacity>0</capacity>
+	</place>
+</placePath></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Suggested path of vehicle {id} retrieved
+        <a href="#PlacePath">PlacePath</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getVehicle"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles/{id}</code></pre></div>
+    <div class="method-summary">Get the {id} vehicle (<span class="nickname">getVehicle</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the vehicle format: Plate</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Vehicle">Vehicle</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "placePathUri" : "placePathUri",
+  "entryTime" : "2000-01-23T04:56:07.000+00:00",
+  "destinationUri" : "destinationUri",
+  "originUri" : "originUri",
+  "self" : "self",
+  "state" : "PARKED",
+  "id" : "id",
+  "type" : "CAR",
+  "positionUri" : "positionUri",
+  "uriPath" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  }
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><vehicle>
+	<self>string</self>
+	<entryTime>2019-01-03T02:17:37.244Z</entryTime>
+	<type>CAR</type>
+	<state>PARKED</state>
+	<positionUri>string</positionUri>
+	<originUri>string</originUri>
+	<destinationUri>string</destinationUri>
+	<placePathUri>string</placePathUri>
+	<uriPath>
+		<placeUri>string</placeUri>
+	</uriPath>
+	<id>string</id>
+</vehicle></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Vehicle retrieved
+        <a href="#Vehicle">Vehicle</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Vehicle not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getVehicles"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/vehicles</code></pre></div>
+    <div class="method-summary">Get all the vehicles that respects the constraints (<span class="nickname">getVehicles</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">since (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; The vehicles that are in the RNS since this date (xsd:date) </div><div class="param">types (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Retrieve the vehicles of these types (VehicleTypes) format: VehicleType</div><div class="param">state (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; The vehicles that are in this state (VehicleState) format: VehicleState</div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#VehiclesResponse">VehiclesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "totalPages" : 0,
+  "vehicles" : {
+    "vehicle" : [ {
+      "placePathUri" : "placePathUri",
+      "entryTime" : "2000-01-23T04:56:07.000+00:00",
+      "destinationUri" : "destinationUri",
+      "originUri" : "originUri",
+      "self" : "self",
+      "state" : "PARKED",
+      "id" : "id",
+      "type" : "CAR",
+      "positionUri" : "positionUri",
+      "uriPath" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      }
+    }, {
+      "placePathUri" : "placePathUri",
+      "entryTime" : "2000-01-23T04:56:07.000+00:00",
+      "destinationUri" : "destinationUri",
+      "originUri" : "originUri",
+      "self" : "self",
+      "state" : "PARKED",
+      "id" : "id",
+      "type" : "CAR",
+      "positionUri" : "positionUri",
+      "uriPath" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      }
+    } ]
+  },
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><vehiclesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<vehicles>
+		<vehicle>
+			<self>string</self>
+			<entryTime>2019-01-03T02:15:37.247Z</entryTime>
+			<type>CAR</type>
+			<state>PARKED</state>
+			<positionUri>string</positionUri>
+			<originUri>string</originUri>
+			<destinationUri>string</destinationUri>
+			<placePathUri>string</placePathUri>
+			<uriPath>
+				<placeUri>string</placeUri>
+			</uriPath>
+			<id>string</id>
+		</vehicle>
+	</vehicles>
+</vehiclesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Vehicles retrieved
+        <a href="#VehiclesResponse">VehiclesResponse</a>
+    <h4 class="field-label">400</h4>
+    Bad query params
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="R4AdminRoads">R4AdminRoads</a></h1>
+  <div class="method"><a name="getRoad"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/roads/{roadName}</code></pre></div>
+    <div class="method-summary">Get the {roadName} road (<span class="nickname">getRoad</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">roadName (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Name of the road (Alphanumeric) format: Alphanumeric</div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Road">Road</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "self" : "self",
+  "roadName" : "roadName"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><road>
+  <self>aeiou</self>
+  <roadName>aeiou</roadName>
+</road></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Road retrieved
+        <a href="#Road">Road</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Road not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getRoads"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/roads</code></pre></div>
+    <div class="method-summary">Get all the roads (<span class="nickname">getRoads</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#RoadsResponse">RoadsResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "totalPages" : 0,
+  "roads" : {
+    "road" : [ {
+      "self" : "self",
+      "roadName" : "roadName"
+    }, {
+      "self" : "self",
+      "roadName" : "roadName"
+    } ]
+  },
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><roadsResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<roads>
+		<road>
+			<self>string</self>
+			<roadName>string</roadName>
+		</road>
+	</roads>
+</roadsResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Roads retrieved
+        <a href="#RoadsResponse">RoadsResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="R5AdminPlaces">R5AdminPlaces</a></h1>
+  <div class="method"><a name="getGates"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/gates</code></pre></div>
+    <div class="method-summary">Get all the gates [of type] (<span class="nickname">getGates</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">type (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Type of the gate format: GateType</div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesResponse">PlacesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "places" : {
+    "place" : [ {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    }, {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    } ]
+  },
+  "totalPages" : 0,
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<places>
+		<place>
+			<self>string</self>
+			<roadSegment>
+				<name>string</name>
+				<roadName>string</roadName>
+			</roadSegment>
+			<parkingArea>
+				<servicesId>
+					<serviceId>string</serviceId>
+				</servicesId>
+			</parkingArea>
+			<gate>
+				<type>IN</type>
+			</gate>
+			<nextPlacesUri>string</nextPlacesUri>
+			<vehiclesUri>string</vehiclesUri>
+			<uriOfNextPlaces>
+				<placeUri>string</placeUri>
+			</uriOfNextPlaces>
+			<id>string</id>
+			<capacity>0</capacity>
+		</place>
+	</places>
+</placesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Gates retrieved
+        <a href="#PlacesResponse">PlacesResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getNextPlaces"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/{id}/nextPlaces</code></pre></div>
+    <div class="method-summary">Get all the NEXT places from the place {id} (<span class="nickname">getNextPlaces</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the place </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesResponse">PlacesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "places" : {
+    "place" : [ {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    }, {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    } ]
+  },
+  "totalPages" : 0,
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<places>
+		<place>
+			<self>string</self>
+			<roadSegment>
+				<name>string</name>
+				<roadName>string</roadName>
+			</roadSegment>
+			<parkingArea>
+				<servicesId>
+					<serviceId>string</serviceId>
+				</servicesId>
+			</parkingArea>
+			<gate>
+				<type>IN</type>
+			</gate>
+			<nextPlacesUri>string</nextPlacesUri>
+			<vehiclesUri>string</vehiclesUri>
+			<uriOfNextPlaces>
+				<placeUri>string</placeUri>
+			</uriOfNextPlaces>
+			<id>string</id>
+			<capacity>0</capacity>
+		</place>
+	</places>
+</placesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Next places of place {id} retrieved
+        <a href="#PlacesResponse">PlacesResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Place {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getParkingAreas"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/parkingAreas</code></pre></div>
+    <div class="method-summary">Get all the parking areas [with the services] (<span class="nickname">getParkingAreas</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">services (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Services that the requested parking areas must have </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesResponse">PlacesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "places" : {
+    "place" : [ {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    }, {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    } ]
+  },
+  "totalPages" : 0,
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<places>
+		<place>
+			<self>string</self>
+			<roadSegment>
+				<name>string</name>
+				<roadName>string</roadName>
+			</roadSegment>
+			<parkingArea>
+				<servicesId>
+					<serviceId>string</serviceId>
+				</servicesId>
+			</parkingArea>
+			<gate>
+				<type>IN</type>
+			</gate>
+			<nextPlacesUri>string</nextPlacesUri>
+			<vehiclesUri>string</vehiclesUri>
+			<uriOfNextPlaces>
+				<placeUri>string</placeUri>
+			</uriOfNextPlaces>
+			<id>string</id>
+			<capacity>0</capacity>
+		</place>
+	</places>
+</placesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Parking areas retrieved
+        <a href="#PlacesResponse">PlacesResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getPlace"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/{id}</code></pre></div>
+    <div class="method-summary">Get the {id} place (<span class="nickname">getPlace</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the place </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Place">Place</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "vehiclesUri" : "vehiclesUri",
+  "parkingArea" : {
+    "servicesId" : {
+      "serviceId" : [ "serviceId", "serviceId" ]
+    }
+  },
+  "roadSegment" : {
+    "name" : "name",
+    "roadName" : "roadName"
+  },
+  "self" : "self",
+  "gate" : {
+    "type" : "IN"
+  },
+  "id" : "id",
+  "nextPlacesUri" : "nextPlacesUri",
+  "uriOfNextPlaces" : {
+    "placeUri" : [ "placeUri", "placeUri" ]
+  },
+  "capacity" : 0
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><place>
+	<self>string</self>
+	<roadSegment>
+		<name>string</name>
+		<roadName>string</roadName>
+	</roadSegment>
+	<parkingArea>
+		<servicesId>
+			<serviceId>string</serviceId>
+		</servicesId>
+	</parkingArea>
+	<gate>
+		<type>IN</type>
+	</gate>
+	<nextPlacesUri>string</nextPlacesUri>
+	<vehiclesUri>string</vehiclesUri>
+	<uriOfNextPlaces>
+		<placeUri>string</placeUri>
+	</uriOfNextPlaces>
+	<id>string</id>
+	<capacity>0</capacity>
+</place></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Place retrieved
+        <a href="#Place">Place</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Place not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getPlaces"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places</code></pre></div>
+    <div class="method-summary">Get all the places with prefix idPrefix (<span class="nickname">getPlaces</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">idPrefix (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Prefix of the place id </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesResponse">PlacesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "places" : {
+    "place" : [ {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    }, {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    } ]
+  },
+  "totalPages" : 0,
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<places>
+		<place>
+			<self>string</self>
+			<roadSegment>
+				<name>string</name>
+				<roadName>string</roadName>
+			</roadSegment>
+			<parkingArea>
+				<servicesId>
+					<serviceId>string</serviceId>
+				</servicesId>
+			</parkingArea>
+			<gate>
+				<type>IN</type>
+			</gate>
+			<nextPlacesUri>string</nextPlacesUri>
+			<vehiclesUri>string</vehiclesUri>
+			<uriOfNextPlaces>
+				<placeUri>string</placeUri>
+			</uriOfNextPlaces>
+			<id>string</id>
+			<capacity>0</capacity>
+		</place>
+	</places>
+</placesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Places retrieved
+        <a href="#PlacesResponse">PlacesResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getRoadSegments"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/roadSegments</code></pre></div>
+    <div class="method-summary">Get all the road segments [with roadName] (<span class="nickname">getRoadSegments</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">roadName (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Road name of the segment format: Alphanumeric</div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#PlacesResponse">PlacesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "places" : {
+    "place" : [ {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    }, {
+      "vehiclesUri" : "vehiclesUri",
+      "parkingArea" : {
+        "servicesId" : {
+          "serviceId" : [ "serviceId", "serviceId" ]
+        }
+      },
+      "roadSegment" : {
+        "name" : "name",
+        "roadName" : "roadName"
+      },
+      "self" : "self",
+      "gate" : {
+        "type" : "IN"
+      },
+      "id" : "id",
+      "nextPlacesUri" : "nextPlacesUri",
+      "uriOfNextPlaces" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      },
+      "capacity" : 0
+    } ]
+  },
+  "totalPages" : 0,
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><placesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<places>
+		<place>
+			<self>string</self>
+			<roadSegment>
+				<name>string</name>
+				<roadName>string</roadName>
+			</roadSegment>
+			<parkingArea>
+				<servicesId>
+					<serviceId>string</serviceId>
+				</servicesId>
+			</parkingArea>
+			<gate>
+				<type>IN</type>
+			</gate>
+			<nextPlacesUri>string</nextPlacesUri>
+			<vehiclesUri>string</vehiclesUri>
+			<uriOfNextPlaces>
+				<placeUri>string</placeUri>
+			</uriOfNextPlaces>
+			<id>string</id>
+			<capacity>0</capacity>
+		</place>
+	</places>
+</placesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Road segments retrieved
+        <a href="#PlacesResponse">PlacesResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getVehiclesInPlace"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/places/{id}/vehicles</code></pre></div>
+    <div class="method-summary">Get all the vehicles in the place {id} (<span class="nickname">getVehiclesInPlace</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Id of the place </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div><div class="param">since (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; The vehicles that are in the RNS since this date </div><div class="param">types (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; Retrieve the vehicles of these types </div><div class="param">state (optional)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; The vehicles that are in this state </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#VehiclesResponse">VehiclesResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "totalPages" : 0,
+  "vehicles" : {
+    "vehicle" : [ {
+      "placePathUri" : "placePathUri",
+      "entryTime" : "2000-01-23T04:56:07.000+00:00",
+      "destinationUri" : "destinationUri",
+      "originUri" : "originUri",
+      "self" : "self",
+      "state" : "PARKED",
+      "id" : "id",
+      "type" : "CAR",
+      "positionUri" : "positionUri",
+      "uriPath" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      }
+    }, {
+      "placePathUri" : "placePathUri",
+      "entryTime" : "2000-01-23T04:56:07.000+00:00",
+      "destinationUri" : "destinationUri",
+      "originUri" : "originUri",
+      "self" : "self",
+      "state" : "PARKED",
+      "id" : "id",
+      "type" : "CAR",
+      "positionUri" : "positionUri",
+      "uriPath" : {
+        "placeUri" : [ "placeUri", "placeUri" ]
+      }
+    } ]
+  },
+  "page" : 6
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><vehiclesResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<vehicles>
+		<vehicle>
+			<self>string</self>
+			<entryTime>2019-01-03T02:15:37.247Z</entryTime>
+			<type>CAR</type>
+			<state>PARKED</state>
+			<positionUri>string</positionUri>
+			<originUri>string</originUri>
+			<destinationUri>string</destinationUri>
+			<placePathUri>string</placePathUri>
+			<uriPath>
+				<placeUri>string</placeUri>
+			</uriPath>
+			<id>string</id>
+		</vehicle>
+	</vehicles>
+</vehiclesResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Vehicles in place {id} retrieved
+        <a href="#VehiclesResponse">VehiclesResponse</a>
+    <h4 class="field-label">400</h4>
+    Bad query params
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Place {id} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="R6AdminConnections">R6AdminConnections</a></h1>
+  <div class="method"><a name="getConnections"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/connections</code></pre></div>
+    <div class="method-summary">Get all the connections (<span class="nickname">getConnections</span>)</div>
+    <div class="method-notes"></div>
+
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ConnectionsResponse">ConnectionsResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "totalPages" : 0,
+  "page" : 6,
+  "connections" : {
+    "connection" : [ {
+      "fromUri" : "fromUri",
+      "toUri" : "toUri",
+      "self" : "self"
+    }, {
+      "fromUri" : "fromUri",
+      "toUri" : "toUri",
+      "self" : "self"
+    } ]
+  }
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><connectionsResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<connections>
+		<connection>
+			<self>string</self>
+			<fromUri>string</fromUri>
+			<toUri>string</toUri>
+		</connection>
+	</connections>
+</connectionsResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Connections retrieved
+        <a href="#ConnectionsResponse">ConnectionsResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getConnectionsFrom"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/connections/{from}</code></pre></div>
+    <div class="method-summary">Get all the connections from {from} (<span class="nickname">getConnectionsFrom</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">from (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Start of the connection </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ConnectionsResponse">ConnectionsResponse</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "next" : "next",
+  "totalPages" : 0,
+  "page" : 6,
+  "connections" : {
+    "connection" : [ {
+      "fromUri" : "fromUri",
+      "toUri" : "toUri",
+      "self" : "self"
+    }, {
+      "fromUri" : "fromUri",
+      "toUri" : "toUri",
+      "self" : "self"
+    } ]
+  }
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><connectionsResponse>
+	<totalPages>0</totalPages>
+	<page>0</page>
+	<next>string</next>
+	<connections>
+		<connection>
+			<self>string</self>
+			<fromUri>string</fromUri>
+			<toUri>string</toUri>
+		</connection>
+	</connections>
+</connectionsResponse></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Connections retrieved
+        <a href="#ConnectionsResponse">ConnectionsResponse</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Place {from} not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getConnectionsFromTo"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /rns/connections/{from}/{to}</code></pre></div>
+    <div class="method-summary">Get the connection from {from} to {to} (<span class="nickname">getConnectionsFromTo</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">from (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; Start of the connection (place id) </div><div class="param">to (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; End of the connection (place id) </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Query parameters</h3>
+    <div class="field-items">
+      <div class="param">authToken (required)</div>
+
+      <div class="param-desc"><span class="param-type">Query Parameter</span> &mdash; A string that permits authentication of the admin. Use &quot;adminToken&quot; to authenticate. </div>
+    </div>  <!-- field-items -->
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Connection">Connection</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "fromUri" : "fromUri",
+  "toUri" : "toUri",
+  "self" : "self"
+}</code></pre>
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/xml</div>
+    <div class="example"><xmp><connection>
+  <self>aeiou</self>
+  <fromUri>aeiou</fromUri>
+  <toUri>aeiou</toUri>
+</connection></xmp></div>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+      <li><code>application/xml</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Connection retrieved
+        <a href="#Connection">Connection</a>
+    <h4 class="field-label">401</h4>
+    Unauthorized
+        <a href="#"></a>
+    <h4 class="field-label">404</h4>
+    Connection not found
+        <a href="#"></a>
+    <h4 class="field-label">500</h4>
+    Internal Server Error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#AddVehicleResponse"><code>AddVehicleResponse</code> - </a></li>
+    <li><a href="#ChangeStateRequest"><code>ChangeStateRequest</code> - </a></li>
+    <li><a href="#Connection"><code>Connection</code> - </a></li>
+    <li><a href="#Connections"><code>Connections</code> - </a></li>
+    <li><a href="#ConnectionsResponse"><code>ConnectionsResponse</code> - </a></li>
+    <li><a href="#ErrorBody"><code>ErrorBody</code> - </a></li>
+    <li><a href="#Gate"><code>Gate</code> - </a></li>
+    <li><a href="#MoveRequest"><code>MoveRequest</code> - </a></li>
+    <li><a href="#NewVehicle"><code>NewVehicle</code> - </a></li>
+    <li><a href="#ParkingArea"><code>ParkingArea</code> - </a></li>
+    <li><a href="#Place"><code>Place</code> - </a></li>
+    <li><a href="#PlacePath"><code>PlacePath</code> - </a></li>
+    <li><a href="#Places"><code>Places</code> - </a></li>
+    <li><a href="#PlacesIdPath"><code>PlacesIdPath</code> - </a></li>
+    <li><a href="#PlacesResponse"><code>PlacesResponse</code> - </a></li>
+    <li><a href="#RnsRootResponse"><code>RnsRootResponse</code> - </a></li>
+    <li><a href="#Road"><code>Road</code> - </a></li>
+    <li><a href="#RoadSegment"><code>RoadSegment</code> - </a></li>
+    <li><a href="#Roads"><code>Roads</code> - </a></li>
+    <li><a href="#RoadsResponse"><code>RoadsResponse</code> - </a></li>
+    <li><a href="#ServicesId"><code>ServicesId</code> - </a></li>
+    <li><a href="#UriOfNextPlaces"><code>UriOfNextPlaces</code> - </a></li>
+    <li><a href="#UriPath"><code>UriPath</code> - </a></li>
+    <li><a href="#Vehicle"><code>Vehicle</code> - </a></li>
+    <li><a href="#Vehicles"><code>Vehicles</code> - </a></li>
+    <li><a href="#VehiclesResponse"><code>VehiclesResponse</code> - </a></li>
+  </ol>
+
+  <div class="model">
+    <h3><a name="AddVehicleResponse"><code>AddVehicleResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">vehicleUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">authToken (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">positionUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">stateUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">placesIdPath (optional)</div><div class="param-desc"><span class="param-type"><a href="#PlacesIdPath">PlacesIdPath</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ChangeStateRequest"><code>ChangeStateRequest</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">state </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">PARKED</div><div class="param-enum">IN_TRANSIT</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Connection"><code>Connection</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">self </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">fromUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">toUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Connections"><code>Connections</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">connection (optional)</div><div class="param-desc"><span class="param-type"><a href="#Connection">array[Connection]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ConnectionsResponse"><code>ConnectionsResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">totalPages </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">page </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">next </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">connections </div><div class="param-desc"><span class="param-type"><a href="#Connections">Connections</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ErrorBody"><code>ErrorBody</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">error (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">UNKNOWN_PLACE</div><div class="param-enum">WRONG_PLACE</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Gate"><code>Gate</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">type (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">IN</div><div class="param-enum">OUT</div><div class="param-enum">INOUT</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="MoveRequest"><code>MoveRequest</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">newPositionId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="NewVehicle"><code>NewVehicle</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">CAR</div><div class="param-enum">TRUCK</div><div class="param-enum">SHUTTLE</div><div class="param-enum">CARAVAN</div>
+<div class="param">originId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">destinationId </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ParkingArea"><code>ParkingArea</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">servicesId </div><div class="param-desc"><span class="param-type"><a href="#ServicesId">ServicesId</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Place"><code>Place</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">self </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">roadSegment (optional)</div><div class="param-desc"><span class="param-type"><a href="#RoadSegment">RoadSegment</a></span>  </div>
+<div class="param">parkingArea (optional)</div><div class="param-desc"><span class="param-type"><a href="#ParkingArea">ParkingArea</a></span>  </div>
+<div class="param">gate (optional)</div><div class="param-desc"><span class="param-type"><a href="#Gate">Gate</a></span>  </div>
+<div class="param">nextPlacesUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">vehiclesUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">uriOfNextPlaces (optional)</div><div class="param-desc"><span class="param-type"><a href="#UriOfNextPlaces">UriOfNextPlaces</a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">capacity (optional)</div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PlacePath"><code>PlacePath</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">place (optional)</div><div class="param-desc"><span class="param-type"><a href="#Place">array[Place]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Places"><code>Places</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">place (optional)</div><div class="param-desc"><span class="param-type"><a href="#Place">array[Place]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PlacesIdPath"><code>PlacesIdPath</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">placeUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: URI</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="PlacesResponse"><code>PlacesResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">totalPages </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">page </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">next </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">places </div><div class="param-desc"><span class="param-type"><a href="#Places">Places</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RnsRootResponse"><code>RnsRootResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">self </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">vehicles </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">roads (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">places (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">roadSegments (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">parkingAreas (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">gates (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">connections (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Road"><code>Road</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">self </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">roadName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RoadSegment"><code>RoadSegment</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">roadName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Roads"><code>Roads</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">road (optional)</div><div class="param-desc"><span class="param-type"><a href="#Road">array[Road]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="RoadsResponse"><code>RoadsResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">totalPages </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">page </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">next </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">roads </div><div class="param-desc"><span class="param-type"><a href="#Roads">Roads</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="ServicesId"><code>ServicesId</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">serviceId (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UriOfNextPlaces"><code>UriOfNextPlaces</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">placeUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: URI</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="UriPath"><code>UriPath</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">placeUri (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">array[String]</a></span>  format: URI</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Vehicle"><code>Vehicle</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">self </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">entryTime </div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">type </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">CAR</div><div class="param-enum">TRUCK</div><div class="param-enum">SHUTTLE</div><div class="param-enum">CARAVAN</div>
+<div class="param">state </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+        <div class="param-enum-header">Enum:</div>
+        <div class="param-enum">PARKED</div><div class="param-enum">IN_TRANSIT</div>
+<div class="param">positionUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">originUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">destinationUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">placePathUri </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: URI</div>
+<div class="param">uriPath </div><div class="param-desc"><span class="param-type"><a href="#UriPath">UriPath</a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="Vehicles"><code>Vehicles</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">vehicle (optional)</div><div class="param-desc"><span class="param-type"><a href="#Vehicle">array[Vehicle]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="VehiclesResponse"><code>VehiclesResponse</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">totalPages </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">page </div><div class="param-desc"><span class="param-type"><a href="#long">Long</a></span>  format: int64</div>
+<div class="param">next </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">vehicles </div><div class="param-desc"><span class="param-type"><a href="#Vehicles">Vehicles</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
